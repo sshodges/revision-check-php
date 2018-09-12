@@ -20,6 +20,58 @@ $(document).ready(function() {
 
     //TOP MENU
 
+    //Make list items draggable and droppable, even if from AJAX request
+    makeDroppable = function () {
+        $(".item-row").droppable({
+            over: function(event, ui) {
+                $(this).addClass("highlighter_focus_in");
+            },
+            out: function(event, ui) {
+                $(this).removeClass("highlighter_focus_in");
+            },
+            drop: function( event, ui ) {
+                var drag = $(ui.draggable).attr("id");
+                var dragType = $(ui.draggable).attr("row-type");
+
+                var drop = $(this).attr("id");
+                var dropType = $(this).attr("row-type");
+                var body = {}
+                body.parent = drop;
+                body = JSON.stringify(body);
+                $.ajax({
+                    url: "http://localhost:3000/v1/"+dragType+"s/" + drag,
+                    method: "PUT",
+                    data: body,
+                    dataType: 'json',
+                    headers: { "Auth": token },
+                    contentType: "application/json",
+                     success: function(result,status,jqXHR ){
+                        console.log(result);
+                        getDocuments();
+                     },
+                     error(jqXHR, textStatus, errorThrown){
+                       console.log(errorThrown);
+                     }
+                });
+
+                console.log(drop);
+                console.log(dropType);
+                console.log(drag);
+                console.log(dragType);
+
+
+            }
+        }).draggable({
+            revert: true,
+            zIndex: 2500,
+            distance: 10,
+            revertDuration: 200,
+            delay: 200,
+            live:true
+        });
+    };
+
+
 
         //When clicking on logo take back to beginning
         $('#brand').click(function () {
@@ -204,7 +256,7 @@ $(document).ready(function() {
             var body = {}
             body.name = $('#folderName').val();
             body.parent = parent;
-            body = JSON.stringify(body);
+            body = JSON.stringify(body);;
 
             $('#folderName').val('');
 
@@ -299,7 +351,7 @@ $(document).ready(function() {
                      });
                      rows += '</div>';
                      $('#documentrow').html(rows);
-
+                    makeDroppable();
 
                  },
                  error(jqXHR, textStatus, errorThrown){
@@ -377,21 +429,45 @@ $(document).ready(function() {
             });
         };
 
-
         renameDocuments = function (){
-            var name = $('#renameName').val();
-            $.post('/revisioncheck2/functions/workspace/renameDocument', {hash: hash, id:clickedId, name:name, parent:parent, type:clickedRowType}, function (data) {
-                if (data === 'name already exists'){
-                    $('#alert').hide.html('<div class="alert alert-danger alert-dismissable">' +
-                        '<a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>' +
-                        '<strong>Cannot Rename Document:</strong> A document with this name alreaady exists' +
-                        '</div>').slideDown('slow');
-                    $('#editDocument').show();
-                    // $('#renameModal').toggle();
-                } else {
-                    location.reload();
-                }
-            });
+            var body = {};
+            body.name = $('#renameName').val();
+            body = JSON.stringify(body);
+
+            if (clickedRowType == 'folder'){
+              $.ajax({
+                  url: "http://localhost:3000/v1/folders/" + clickedId,
+                  method: "PUT",
+                  data: body,
+                  dataType: 'json',
+                  headers: { "Auth": token },
+                  contentType: "application/json",
+                   success: function(result,status,jqXHR ){
+                      console.log(result);
+                      getDocuments();
+                   },
+                   error(jqXHR, textStatus, errorThrown){
+                     console.log(errorThrown);
+                   }
+              });
+            } else {
+              $.ajax({
+                  url: "http://localhost:3000/v1/documents/" + clickedId,
+                  method: "PUT",
+                  data: body,
+                  dataType: 'json',
+                  headers: { "Auth": token },
+                  contentType: "application/json",
+                   success: function(result,status,jqXHR ){
+                      console.log(result);
+                      getDocuments();
+                   },
+                   error(jqXHR, textStatus, errorThrown){
+                     console.log(errorThrown);
+                   }
+              });
+            }
+
         };
 
         deleteDocuments = function (){
@@ -404,33 +480,7 @@ $(document).ready(function() {
 
     //DIPLAYED SERVER CONTENT
 
-        //Make list items draggable and droppable, even if from AJAX request
-        makeDroppable = function () {
-            $(".item-row").droppable({
-                over: function(event, ui) {
-                    $(this).addClass("highlighter_focus_in");
-                },
-                out: function(event, ui) {
-                    $(this).removeClass("highlighter_focus_in");
-                },
-                drop: function( event, ui ) {
-                    var drag = $(ui.draggable).attr("id");
-                    var drop = $(this).attr("id");
-                    $.post("/revisioncheck2/functions/workspace/dropDocument", {drag:drag, drop:drop, hash:hash}, function (data) {
-                        location.reload()
-                    });
 
-                }
-            }).draggable({
-                revert: true,
-                zIndex: 2500,
-                distance: 10,
-                revertDuration: 200,
-                delay: 200
-            });
-        };
-        //Run when page is first loaded
-        makeDroppable();
 
         //Allow user to drag item into breadcrumb to move back a folder
         $("#back").droppable({
@@ -442,12 +492,30 @@ $(document).ready(function() {
             },
             drop: function( event, ui ) {
                 var drag = $(ui.draggable).attr("id");
+                var dragType = $(ui.draggable).attr("row-type");
                 var drop = $('#previousBread').find('a').attr('id');
+                var body = {};
+                body.parent = drop;
+                body = JSON.stringify(body);
                 $(this).removeClass("highlighter_focus_in");
-                $.post("/revisioncheck2/functions/workspace/dropDocument", {drag:drag, drop:drop, hash:hash}, function (data) {
-                    location.reload()
-
+                console.log(drop);
+                console.log(dragType);
+                $.ajax({
+                    url: "http://localhost:3000/v1/"+dragType+"s/" + drag,
+                    method: "PUT",
+                    data: body,
+                    dataType: 'json',
+                    headers: { "Auth": token },
+                    contentType: "application/json",
+                     success: function(result,status,jqXHR ){
+                        console.log(result);
+                        getDocuments();
+                     },
+                     error(jqXHR, textStatus, errorThrown){
+                       console.log(errorThrown);
+                     }
                 });
+
             }
 
         });
@@ -467,7 +535,7 @@ $(document).ready(function() {
         //
         // });
 
-    });
+        });
 
     //QR Code
 

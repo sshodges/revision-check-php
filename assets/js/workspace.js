@@ -14,14 +14,18 @@ $(document).ready(function() {
         var clickedRowType;
         var revCode;
         var parent = 0;
+        var currentName = 'Home'
+        var prevName = "Home";
+        var prevParent;
+
 
         //type of folder user is in
         var docType = 'folder';
 
     //TOP MENU
 
-    //Make list items draggable and droppable, even if from AJAX request
-    makeDroppable = function () {
+        //Make list items draggable and droppable, even if from AJAX request
+        makeDroppable = function () {
         $(".item-row").droppable({
             over: function(event, ui) {
                 $(this).addClass("highlighter_focus_in");
@@ -127,8 +131,18 @@ $(document).ready(function() {
         var key = e.which;
         if(key == 13)  // the enter key code
         {
+          var searchText = $('#searchText').val();
+          if (parent === 0 || parent === "0"){
+            $('.sad').text('Home')
+            $('.previous-breadcrumb').attr('id', 0)
+          }
 
+          $('#currentBread').text(searchText);
 
+          $('#searchText').val('');
+          if (searchText !== ''){
+            searchDocuments(searchText);
+          }
         }
     });
 
@@ -173,15 +187,74 @@ $(document).ready(function() {
         });
 
         $('body').on("click",'.item-row', function(){
+            prevName = currentName;
+            prevParent = parent;
+            currentName = $(this).text().trim();
             parent = $(this).attr('id');
-            var type = $(this).attr('row-type')
-            if (type === 'folder'){
+            docType = $(this).attr('row-type')
+            if (docType === 'folder'){
               getDocuments();
+              getBreadcrumbs();
             } else {
               getRevisions();
+              getBreadcrumbs();
             }
 
         });
+
+        $('body').on("click",'.previous-breadcrumb', function(){
+            parent = $(this).attr('id');
+            currentName = prevName;
+            if (parent === "0"){
+              prevName = "Home";
+              getBreadcrumbs();
+              getDocuments();
+            } else {
+              $.ajax({
+                  url: "http://localhost:3000/v1/folders/"+parent,
+                  method: "GET",
+                  dataType: 'json',
+                  headers: { "Auth": token },
+                  contentType: "application/json",
+                   success: function(result,status,jqXHR ){
+                      getDocuments();
+                   },
+                   error(jqXHR, textStatus, errorThrown){
+                     console.log(errorThrown);
+                   },
+                   complete: function (result,status,jqXHR ) {
+                     prevParent = result.responseJSON[0].parent;
+                     if (prevParent !== 0) {
+                       $.ajax({
+                           url: "http://localhost:3000/v1/folders/"+prevParent,
+                           method: "GET",
+                           dataType: 'json',
+                           headers: { "Auth": token },
+                           contentType: "application/json",
+                            success: function(result,status,jqXHR ){
+
+                            },
+                            error(jqXHR, textStatus, errorThrown){
+                              console.log(errorThrown);
+                            },
+                            complete: function (result,status,jqXHR ) {
+
+
+                              prevName = result.responseJSON[0].name;
+                              getBreadcrumbs();
+
+                            }
+                         });
+                     } else {
+                       prevName = "Home";
+                       getBreadcrumbs();
+                     }
+
+                   }
+                });
+            }
+
+            });
 
         $('#renameButton').click(function () {
             $('#renameTitle').text('Rename '+ clickedRowType);
@@ -291,10 +364,7 @@ $(document).ready(function() {
                 headers: { "Auth": token},
                 contentType: "application/json",
                  success: function(result,status,jqXHR ){
-                      if (jqXHR.getResponseHeader('Auth')) {
-                        localStorage.setItem('token', jqXHR.getResponseHeader('Auth'));
-                        window.location.replace('app/home');
-                      }
+                      getRevisions();
                  },
                  error(jqXHR, textStatus, errorThrown) {
                      $("#login-error").text('Incorrect email or password');
@@ -308,6 +378,9 @@ $(document).ready(function() {
             $('.document-pill').show();
             $('.revision-pill').hide();
             var rows = '<div class="col-xs-12" id="documentbar">';
+            if (parent === "0"){
+              $('.sad').html('')
+            }
             $.ajax({
                 url: "http://localhost:3000/v1/folders/parent/"+parent,
                 method: "GET",
@@ -321,43 +394,45 @@ $(document).ready(function() {
                                     <input type="checkbox" class="form-check-input" style="display: none;">\
                                 </div>\
                                 <div class="item-row" id="'+folder.id+'" row-type="folder">\
-                                    <img class="img-responsive icon" src="/revisioncheck2/assets/img/folder.png">\
-                                    '+folder.name+'</div>\
+                                    <img class="img-responsive icon" src="/revisioncheck2/assets/img/folder.png">'+folder.name+'</div>\
                                  </div>';
                       });
 
                  },
                  error(jqXHR, textStatus, errorThrown){
                    console.log(errorThrown);
-                 }
-            });
-
-            $.ajax({
-                url: "http://localhost:3000/v1/documents/parent/"+parent,
-                method: "GET",
-                dataType: 'json',
-                headers: { "Auth": token },
-                contentType: "application/json",
-                 success: function(result,status,jqXHR ){
-                     result.forEach(function (documents) {
-                       rows += '<div class="row item sortable">\
-                               <div class="col checkbox">\
-                                   <input type="checkbox" class="form-check-input" style="display: none;">\
-                               </div>\
-                               <div class="item-row" id="'+documents.id+'" row-type="document">\
-                                   <img class="img-responsive icon" src="/revisioncheck2/assets/img/document.png">\
-                                   '+documents.name+'</div>\
-                                </div>';
-                     });
-                     rows += '</div>';
-                     $('#documentrow').html(rows);
-                    makeDroppable();
-
                  },
-                 error(jqXHR, textStatus, errorThrown){
-                   console.log(errorThrown);
+                 complete: function (){
+                   $.ajax({
+                       url: "http://localhost:3000/v1/documents/parent/"+parent,
+                       method: "GET",
+                       dataType: 'json',
+                       headers: { "Auth": token },
+                       contentType: "application/json",
+                        success: function(result,status,jqXHR ){
+                            result.forEach(function (documents) {
+                              rows += '<div class="row item sortable">\
+                                      <div class="col checkbox">\
+                                          <input type="checkbox" class="form-check-input" style="display: none;">\
+                                      </div>\
+                                      <div class="item-row" id="'+documents.id+'" row-type="document">\
+                                          <img class="img-responsive icon" src="/revisioncheck2/assets/img/document.png">\
+                                          '+documents.name+'</div>\
+                                       </div>';
+                            });
+                            rows += '</div>';
+                            $('#documentrow').html(rows);
+                           makeDroppable();
+
+                        },
+                        error(jqXHR, textStatus, errorThrown){
+                          console.log(errorThrown);
+                        }
+                   });
                  }
             });
+
+
 
         };
         getDocuments();
@@ -423,11 +498,77 @@ $(document).ready(function() {
 
         };
 
+        getBreadcrumbs = function () {
+          $('#back').html('<ol class="breadcrumb">\
+              <li class="breadcrumb-item previous-breadcrumb" id="'+prevParent+'"><a class="sad">'+prevName+'</a></li>\
+              <li class="breadcrumb-item active" id="currentBread">'+currentName+'</li>\
+          </ol>');
+
+        }
+
         getArchives = function (){
             $.post('/revisioncheck2/functions/workspace/getArchives', {hash: hash,}, function (data) {
                 $('#documentbar').html(data);
             });
         };
+
+        searchDocuments = function (searchTerm) {
+          $('#revisionHeading').hide();
+          $('.document-pill').show();
+          $('.revision-pill').hide();
+          var rows = '<div class="col-xs-12" id="documentbar">';
+
+          $.ajax({
+              url: "http://localhost:3000/v1/folders/search/"+searchTerm,
+              method: "GET",
+              dataType: 'json',
+              headers: { "Auth": token },
+              contentType: "application/json",
+               success: function(result,status,jqXHR ){
+                    result.forEach(function (folder) {
+                      rows += '<div class="row item sortable">\
+                              <div class="col checkbox">\
+                                  <input type="checkbox" class="form-check-input" style="display: none;">\
+                              </div>\
+                              <div class="item-row" id="'+folder.id+'" row-type="folder">\
+                                  <img class="img-responsive icon" src="/revisioncheck2/assets/img/folder.png">'+folder.name+'</div>\
+                               </div>';
+                    });
+
+               },
+               error(jqXHR, textStatus, errorThrown){
+                 console.log(errorThrown);
+               },
+               complete: function (){
+                 $.ajax({
+                     url: "http://localhost:3000/v1/documents/search/"+searchTerm,
+                     method: "GET",
+                     dataType: 'json',
+                     headers: { "Auth": token },
+                     contentType: "application/json",
+                      success: function(result,status,jqXHR ){
+                          result.forEach(function (documents) {
+                            rows += '<div class="row item sortable">\
+                                    <div class="col checkbox">\
+                                        <input type="checkbox" class="form-check-input" style="display: none;">\
+                                    </div>\
+                                    <div class="item-row" id="'+documents.id+'" row-type="document">\
+                                        <img class="img-responsive icon" src="/revisioncheck2/assets/img/document.png">\
+                                        '+documents.name+'</div>\
+                                     </div>';
+                          });
+                          rows += '</div>';
+                          $('#documentrow').html(rows);
+                         makeDroppable();
+
+                      },
+                      error(jqXHR, textStatus, errorThrown){
+                        console.log(errorThrown);
+                      }
+                 });
+               }
+          });
+        }
 
         renameDocuments = function (){
             var body = {};

@@ -68,7 +68,7 @@ session_start();
             <div class="row" id="breadcrumbRow">
                 <div class="" id="back">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item" id="previousBread"><a href="" class="sad" id="0"></a></li>
+                        <li class="breadcrumb-item previous-breadcrumb" id="previousBread"><a href="" class="sad" id="0"></a></li>
                         <li class="breadcrumb-item active" id="currentBread">Home</li>
                     </ol>
                 </div>

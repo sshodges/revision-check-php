@@ -101,6 +101,7 @@ $(document).ready(function() {
         });
 
 
+
         //Execute function when Enter key hit
         $('.modal-text').keypress(function (e) {
             var modal = ($(this).attr('id'));
@@ -127,7 +128,7 @@ $(document).ready(function() {
             $(this).animate({ width: 100 }, 'slow');
         });
 
-    $('#searchText').keypress(function (e) {
+        $('#searchText').keypress(function (e) {
         var key = e.which;
         if(key == 13)  // the enter key code
         {
@@ -612,9 +613,84 @@ $(document).ready(function() {
         };
 
         deleteDocuments = function (){
-            $.post('/revisioncheck2/functions/workspace/deleteDocument', {hash: hash, id:clickedId, parent:parent, type:clickedRowType}, function (data) {
-                location.reload();
+          var parentId = []
+          if (clickedRowType == "folder"){
+            $.ajax({
+                url: "http://localhost:3000/v1/folders/children/"+clickedId,
+                method: "POST",
+                dataType: 'json',
+                headers: { "Auth": token },
+                contentType: "application/json",
+                 success: function(result,status,jqXHR ){
+                   console.log("success result: ", result);
+                 },
+                 error(jqXHR, textStatus, errorThrown){
+                   console.log(errorThrown);
+                 },
+                 complete: function (result){
+                  var ids = result.responseJSON;
+                  var async_request=[];
+                  var responses=[];
+                  for(id in ids)
+                  {
+                      console.log("id: ", ids[id]);
+                      // you can push  any aysnc method handler
+                      async_request.push($.ajax({
+                          url:"http://localhost:3000/v1/folders/"+ids[id], // your url
+                          method:'delete',
+                          dataType: 'json',
+                          headers: { "Auth": token },
+                          contentType: "application/json",
+                          success: function(data){
+                              console.log('success of ajax response')
+                              responses.push(data);
+                          }
+                      }));
+                      async_request.push($.ajax({
+                          url:"http://localhost:3000/v1/documents/parent/"+ids[id], // your url
+                          method:'put',
+                          dataType: 'json',
+                          headers: { "Auth": token },
+                          contentType: "application/json",
+                          success: function(data){
+                              console.log('success of ajax response')
+                              responses.push(data);
+                          }
+                      }));
+                  }
+
+                  $.when.apply(null, async_request).done( function(){
+                      // all done
+                      console.log('all request completed')
+                      console.log(responses);
+                      getDocuments();
+                  });
+
+
+
+                 }
+              });
+          } else {
+            var body = {};
+            body.status = false;
+            body = JSON.stringify(body);
+            $.ajax({
+                url: "http://localhost:3000/v1/documents/" + clickedId,
+                method: "PUT",
+                data: body,
+                dataType: 'json',
+                headers: { "Auth": token },
+                contentType: "application/json",
+                 success: function(result,status,jqXHR ){
+                    console.log(result);
+                    getDocuments();
+                 },
+                 error(jqXHR, textStatus, errorThrown){
+                   console.log(errorThrown);
+                 }
             });
+          }
+
         };
 
 

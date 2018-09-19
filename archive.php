@@ -1,13 +1,4 @@
 <?php
-include_once("functions/db.php");
-
-session_start();
-
-if(!isset($_SESSION['idd'])){
-    header("Location: ../login");
-} else {
-    $userId = $_SESSION['idd'];
-}
 
 
 ?>
@@ -35,7 +26,7 @@ if(!isset($_SESSION['idd'])){
         <li><a href="app/home">Home</a></li>
         <li><a class="active" href="archive">Archive</a></li>
         <li><a href="myaccount">My Account</a></li>
-        <li id="logout" class=""><a href="logout">Logout</a></li>
+        <li id="logout" class=""><a href="">Logout</a></li>
     </ul>
 </div>
 <div id="right-bar" class="col-sm-9">
@@ -45,31 +36,6 @@ if(!isset($_SESSION['idd'])){
 
 
             <div class="row" id="documentrow">
-
-                <?php
-                    echo '<div class="col-md-12" id="documentbar">';
-
-                    $stmt = $db->prepare("SELECT * FROM documents WHERE userId=? AND status='inactive' ORDER BY docName ASC");
-                    $stmt->bind_param('s', $userId); // 's' specifies the variable type => 'string'
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-
-                    if ($result->num_rows > 0) {
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $text = '<div class="row item sortable">
-                        <div class="col checkbox">
-                            <input type="checkbox" class="form-check-input archiveChecks" style="display: none;">
-                        </div>
-                        <div class="" id="%s" row-type="%s">
-                            <img class="img-responsive icon" src="/revisioncheck2/assets/img/%s.png">
-                            %s</div>
-                         </div>';
-                            $text = sprintf($text, $row['id'], $row['docType'], $row['docType'], $row['docName']);
-                            echo $text;
-                        }
-                    }
-
-                ?>
             </div>
         </div>
 
@@ -101,12 +67,9 @@ if(!isset($_SESSION['idd'])){
 
 
 
-<script type="application/javascript">
-    <?php
-    echo 'var hash='.$userId . ';';
-    ?>
-</script>
-<script src="/revisioncheck2/assets/js/workspace.js"></script>
+
+<script src="/revisioncheck2/assets/js/archives.js"></script>
+
 
 
 </body>

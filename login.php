@@ -20,7 +20,7 @@ if(isset($_SESSION['idd'])){
     <link rel="icon" href="assets/img/icon.png">
 
 </head>
-<body>
+<body style="display: none">
 
 
 <div class="container" id="block">

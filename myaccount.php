@@ -1,23 +1,6 @@
 <?php
 include_once("functions/db.php");
 
-session_start();
-
-if(!isset($_SESSION['idd'])){
-    header("Location: ../login");
-} else {
-    $userId = $_SESSION['idd'];
-}
-
-$result = $db->query("SELECT * FROM accounts WHERE id='$userId'");
-if ($result->num_rows > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $first = $row['first_name'];
-        $last = $row['last_name'];
-        $company = $row['company'];
-    }
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,7 +26,7 @@ if ($result->num_rows > 0) {
         <li><a href="app/home">Home</a></li>
         <li><a href="archive">Archive</a></li>
         <li><a class="active" href="myaccount">My Account</a></li>
-        <li id="logout" class=""><a href="logout">Logout</a></li>
+        <li id="logout" class=""><a href="">Logout</a></li>
     </ul>
 </div>
 <div id="right-bar" class="col-sm-9">
@@ -55,7 +38,7 @@ if ($result->num_rows > 0) {
                     <h5>Name</h5>
                 </div>
                 <div class="col-xs-9 right">
-                    <h5><?php echo $first . ' '. $last; ?> <a class="edit" id="name"> Edit</a></h5>
+                    <h5><strong id="nameText"></strong><a class="edit" id="name"> Edit</a></h5>
                 </div>
             </div>
             <hr>
@@ -64,7 +47,7 @@ if ($result->num_rows > 0) {
                     <h5>Company</h5>
                 </div>
                 <div class="col-xs-9 right">
-                    <h5><?php echo $company; ?><a class="edit" id="company"> Edit</a></h5>
+                    <h5><strong id="companyText"></strong><a class="edit" id="company"> Edit</a></h5>
                 </div>
             </div>
             <hr>
@@ -156,13 +139,6 @@ if ($result->num_rows > 0) {
     </div>
 </div>
 
-
-
-<script type="application/javascript">
-    <?php
-    echo 'var userId='.$userId . ';';
-    ?>
-</script>
 <script src="/revisioncheck2/assets/js/myaccount.js"></script>
 
 

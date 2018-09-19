@@ -1,5 +1,11 @@
 $(function() {
 
+  if (localStorage.getItem("token") !== null) {
+    window.location.replace('app/');
+  } else {
+    $('body').show();
+  }
+
     var testEmail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
 
     $('#login-form-link').click(function(e) {
@@ -41,7 +47,7 @@ $(function() {
                       }
                  },
                  error(jqXHR, textStatus, errorThrown){
-                     $("#login-error").text('Incorrect email or password');
+                     $("#login-error").text(jqXHR.responseJSON);
                  }
             });
 

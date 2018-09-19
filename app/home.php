@@ -26,7 +26,7 @@ session_start();
     <link rel="icon" href="/revisioncheck2/assets/img/icon.png">
 
 </head>
-<body>
+<body style="display:none">
 <div id="alert"></div>
 
 <div id="left-bar" class="col-sm-3">
@@ -35,7 +35,7 @@ session_start();
             <li><a class="active" href="home">Home</a></li>
             <li><a href="../archive">Archive</a></li>
             <li><a href="../myaccount">My Account</a></li>
-            <li id="logout" class=""><a href="../logout">Logout</a></li>
+            <li id="logout" class=""><a href="">Logout</a></li>
         </ul>
 </div>
 <div id="right-bar" class="col-sm-9">

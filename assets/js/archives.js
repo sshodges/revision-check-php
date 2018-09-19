@@ -1,10 +1,10 @@
 $(document).ready(function() {
     var token;
     if (localStorage.getItem("token") === null) {
-      window.location.replace('../login');
+      window.location.replace('../login')
     } else {
       token = localStorage.getItem("token");
-      $('body').show();
+
     }
 
     //VARIABLES
@@ -22,63 +22,58 @@ $(document).ready(function() {
         //type of folder user is in
         var docType = 'folder';
 
-        $('#logout').click(function () {
-          localStorage.removeItem('token');
-          window.location.replace('../login');
-        });
-
     //TOP MENU
 
         //Make list items draggable and droppable, even if from AJAX request
         makeDroppable = function () {
-        $(".item-row").droppable({
-            over: function(event, ui) {
-                $(this).addClass("highlighter_focus_in");
-            },
-            out: function(event, ui) {
-                $(this).removeClass("highlighter_focus_in");
-            },
-            drop: function( event, ui ) {
-                var drag = $(ui.draggable).attr("id");
-                var dragType = $(ui.draggable).attr("row-type");
+          $(".item-row").droppable({
+              over: function(event, ui) {
+                  $(this).addClass("highlighter_focus_in");
+              },
+              out: function(event, ui) {
+                  $(this).removeClass("highlighter_focus_in");
+              },
+              drop: function( event, ui ) {
+                  var drag = $(ui.draggable).attr("id");
+                  var dragType = $(ui.draggable).attr("row-type");
 
-                var drop = $(this).attr("id");
-                var dropType = $(this).attr("row-type");
-                var body = {}
-                body.parent = drop;
-                body = JSON.stringify(body);
-                $.ajax({
-                    url: "http://localhost:3000/v1/"+dragType+"s/" + drag,
-                    method: "PUT",
-                    data: body,
-                    dataType: 'json',
-                    headers: { "Auth": token },
-                    contentType: "application/json",
-                     success: function(result,status,jqXHR ){
-                        console.log(result);
-                        getDocuments();
-                     },
-                     error(jqXHR, textStatus, errorThrown){
-                       console.log(errorThrown);
-                     }
-                });
+                  var drop = $(this).attr("id");
+                  var dropType = $(this).attr("row-type");
+                  var body = {}
+                  body.parent = drop;
+                  body = JSON.stringify(body);
+                  $.ajax({
+                      url: "http://localhost:3000/v1/"+dragType+"s/" + drag,
+                      method: "PUT",
+                      data: body,
+                      dataType: 'json',
+                      headers: { "Auth": token },
+                      contentType: "application/json",
+                       success: function(result,status,jqXHR ){
+                          console.log(result);
+                          getDocuments();
+                       },
+                       error(jqXHR, textStatus, errorThrown){
+                         console.log(errorThrown);
+                       }
+                  });
 
-                console.log(drop);
-                console.log(dropType);
-                console.log(drag);
-                console.log(dragType);
+                  console.log(drop);
+                  console.log(dropType);
+                  console.log(drag);
+                  console.log(dragType);
 
 
-            }
-        }).draggable({
-            revert: true,
-            zIndex: 2500,
-            distance: 10,
-            revertDuration: 200,
-            delay: 200,
-            live:true
-        });
-    };
+              }
+          }).draggable({
+              revert: true,
+              zIndex: 2500,
+              distance: 10,
+              revertDuration: 200,
+              delay: 200,
+              live:true
+          });
+        };
 
 
 
@@ -119,38 +114,39 @@ $(document).ready(function() {
         });
 
         $('#searchText').focus(function()
-        {
-            /*to make this flexible, I'm storing the current width in an attribute*/
-            $(this).attr('data-default', $(this).width());
-            $(this).attr("placeholder", "Enter Document Number");
-            $(this).animate({ width: 250 }, 'slow');
-        }).blur(function()
-        {
-            /* lookup the original width */
-            var w = $(this).attr('data-default');
-            $(this).attr("placeholder", "Search");
+          {
+              /*to make this flexible, I'm storing the current width in an attribute*/
+              $(this).attr('data-default', $(this).width());
+              $(this).attr("placeholder", "Enter Document Number");
+              $(this).animate({ width: 250 }, 'slow');
+          }).blur(function()
+          {
+              /* lookup the original width */
+              var w = $(this).attr('data-default');
+              $(this).attr("placeholder", "Search");
 
-            $(this).animate({ width: 100 }, 'slow');
-        });
+              $(this).animate({ width: 100 }, 'slow');
+          }
+        );
 
         $('#searchText').keypress(function (e) {
-        var key = e.which;
-        if(key == 13)  // the enter key code
-        {
-          var searchText = $('#searchText').val();
-          if (parent === 0 || parent === "0"){
-            $('.sad').text('Home')
-            $('.previous-breadcrumb').attr('id', 0)
-          }
+          var key = e.which;
+          if(key == 13)  // the enter key code
+          {
+            var searchText = $('#searchText').val();
+            if (parent === 0 || parent === "0"){
+              $('.sad').text('Home')
+              $('.previous-breadcrumb').attr('id', 0)
+            }
 
-          $('#currentBread').text(searchText);
+            $('#currentBread').text(searchText);
 
-          $('#searchText').val('');
-          if (searchText !== ''){
-            searchDocuments(searchText);
+            $('#searchText').val('');
+            if (searchText !== ''){
+              searchDocuments(searchText);
+            }
           }
-        }
-    });
+        });
 
     //EDIT DOCUMENT
 
@@ -278,16 +274,18 @@ $(document).ready(function() {
         });
 
         $('#activateButton').click(function () {
-            var checks = $('.archiveChecks:checkbox:checked');
-            if (checks.length > 0){
+            var ids = $('.archiveChecks:checkbox:checked');
+            if (ids.length > 0){
+                var async_request=[];
+                var responses=[];
                 var body = {};
                 body.status = true;
                 body = JSON.stringify(body);
-                for (id=0; id<checks.length;id++){
-                    var id = $(checks[i]).parent().next().attr('id');
+                for (id=0; id<ids.length;id++){
+                    var currentId = $(ids[id]).parent().next().attr('id');
 
                     async_request.push($.ajax({
-                        url:"http://localhost:3000/v1/documents/"+ids[id], // your url
+                        url:"http://localhost:3000/v1/documents/"+currentId, // your url
                         method:'put',
                         dataType: 'json',
                         data: body,
@@ -303,7 +301,7 @@ $(document).ready(function() {
                     // all done
                     console.log('all request completed')
                     console.log(responses);
-                    getDocuments();
+                    getArchives();
                 });
 
             } else {
@@ -422,13 +420,10 @@ $(document).ready(function() {
                                     <img class="img-responsive icon" src="/revisioncheck2/assets/img/folder.png">'+folder.name+'</div>\
                                  </div>';
                       });
+
                  },
                  error(jqXHR, textStatus, errorThrown){
                    console.log(errorThrown);
-                   if (errorThrown === 'Unauthorized'){
-                     localStorage.removeItem('token');
-                     window.location.replace('../login');
-                   }
                  },
                  complete: function (){
                    $.ajax({
@@ -463,7 +458,6 @@ $(document).ready(function() {
 
 
         };
-        getDocuments();
 
         getRevisions = function () {
             var rows = '<div class="col-xs-12" id="documentbar">\
@@ -540,34 +534,36 @@ $(document).ready(function() {
             $('.sad').html('')
           }
 
-        $.ajax({
-           url: "http://localhost:3000/v1/archives",
-           method: "GET",
-           dataType: 'json',
-           headers: { "Auth": token },
-           contentType: "application/json",
-            success: function(result,status,jqXHR ){
-                result.forEach(function (documents) {
-                  rows += '<div class="row item sortable">\
-                          <div class="col checkbox">\
-                              <input type="checkbox" class="form-check-input" style="display: none;">\
-                          </div>\
-                          <div class="item-row" id="'+documents.id+'" row-type="document">\
-                              <img class="img-responsive icon" src="/revisioncheck2/assets/img/document.png">\
-                              '+documents.name+'</div>\
-                           </div>';
-                });
-                rows += '</div>';
-                $('#documentrow').html(rows);
-               makeDroppable();
+          $.ajax({
+             url: "http://localhost:3000/v1/archives",
+             method: "GET",
+             dataType: 'json',
+             headers: { "Auth": token },
+             contentType: "application/json",
+              success: function(result,status,jqXHR ){
+                  result.forEach(function (documents) {
+                    rows += '<div class="row item sortable">\
+                            <div class="col checkbox">\
+                                <input type="checkbox" class="form-check-input archiveChecks" style="display: none;">\
+                            </div>\
+                            <div class="" id="'+documents.id+'" row-type="archive">\
+                                <img class="img-responsive icon" src="/revisioncheck2/assets/img/archive.png">\
+                                '+documents.name+'</div>\
+                             </div>';
+                  });
+                  rows += '</div>';
+                  $('#documentrow').html(rows);
+                 makeDroppable();
 
-            },
-            error(jqXHR, textStatus, errorThrown){
-              console.log(errorThrown);
-            }
-        });
+              },
+              error(jqXHR, textStatus, errorThrown){
+                console.log(errorThrown);
+              }
+          });
 
         };
+
+        getArchives();
 
         searchDocuments = function (searchTerm) {
           $('#revisionHeading').hide();

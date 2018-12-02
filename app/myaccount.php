@@ -1,5 +1,4 @@
 <?php
-include_once("functions/db.php");
 
 ?>
 <!DOCTYPE html>

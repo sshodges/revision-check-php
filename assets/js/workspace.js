@@ -57,20 +57,12 @@ $(document).ready(function() {
                     headers: { "Auth": token },
                     contentType: "application/json",
                      success: function(result,status,jqXHR ){
-                        console.log(result);
                         getDocuments();
                      },
                      error(jqXHR, textStatus, errorThrown){
                        console.log(errorThrown);
                      }
                 });
-
-                console.log(drop);
-                console.log(dropType);
-                console.log(drag);
-                console.log(dragType);
-
-
             }
         }).draggable({
             revert: true,
@@ -296,15 +288,12 @@ $(document).ready(function() {
                         headers: { "Auth": token },
                         contentType: "application/json",
                         success: function(data){
-                            console.log('success of ajax response')
                             responses.push(data);
                         }
                     }));
                 }
                 $.when.apply(null, async_request).done( function(){
                     // all done
-                    console.log('all request completed')
-                    console.log(responses);
                     getDocuments();
                 });
 
@@ -381,7 +370,6 @@ $(document).ready(function() {
             var body = {}
             body.name = $('#revisionName').val().toString();
             $('#revisionName').val('');
-            console.log(body);
             body = JSON.stringify(body);
             $.ajax({
                 url: urlStart + "/v1/revisions/"+parent,
@@ -643,7 +631,6 @@ $(document).ready(function() {
                   headers: { "Auth": token },
                   contentType: "application/json",
                    success: function(result,status,jqXHR ){
-                      console.log(result);
                       getDocuments();
                    },
                    error(jqXHR, textStatus, errorThrown){
@@ -659,7 +646,6 @@ $(document).ready(function() {
                   headers: { "Auth": token },
                   contentType: "application/json",
                    success: function(result,status,jqXHR ){
-                      console.log(result);
                       getDocuments();
                    },
                    error(jqXHR, textStatus, errorThrown){
@@ -680,7 +666,6 @@ $(document).ready(function() {
                 headers: { "Auth": token },
                 contentType: "application/json",
                  success: function(result,status,jqXHR ){
-                   console.log("success result: ", result);
                  },
                  error(jqXHR, textStatus, errorThrown){
                    console.log(errorThrown);
@@ -691,7 +676,6 @@ $(document).ready(function() {
                   var responses=[];
                   for(id in ids)
                   {
-                      console.log("id: ", ids[id]);
                       // you can push  any aysnc method handler
                       async_request.push($.ajax({
                           url:urlStart + "/v1/folders/"+ids[id], // your url
@@ -700,7 +684,6 @@ $(document).ready(function() {
                           headers: { "Auth": token },
                           contentType: "application/json",
                           success: function(data){
-                              console.log('success of ajax response')
                               responses.push(data);
                           }
                       }));
@@ -711,7 +694,6 @@ $(document).ready(function() {
                           headers: { "Auth": token },
                           contentType: "application/json",
                           success: function(data){
-                              console.log('success of ajax response')
                               responses.push(data);
                           }
                       }));
@@ -719,8 +701,6 @@ $(document).ready(function() {
 
                   $.when.apply(null, async_request).done( function(){
                       // all done
-                      console.log('all request completed')
-                      console.log(responses);
                       getDocuments();
                   });
 
@@ -741,7 +721,6 @@ $(document).ready(function() {
                 headers: { "Auth": token },
                 contentType: "application/json",
                  success: function(result,status,jqXHR ){
-                    console.log(result);
                     getDocuments();
                  },
                  error(jqXHR, textStatus, errorThrown){
@@ -769,13 +748,12 @@ $(document).ready(function() {
             drop: function( event, ui ) {
                 var drag = $(ui.draggable).attr("id");
                 var dragType = $(ui.draggable).attr("row-type");
-                var drop = $('#previousBread').find('a').attr('id');
+                var drop = $('.previous-breadcrumb').attr('id');
                 var body = {};
                 body.parent = drop;
                 body = JSON.stringify(body);
                 $(this).removeClass("highlighter_focus_in");
-                console.log(drop);
-                console.log(dragType);
+
                 $.ajax({
                     url: urlStart + "/v1/"+dragType+"s/" + drag,
                     method: "PUT",
@@ -784,7 +762,6 @@ $(document).ready(function() {
                     headers: { "Auth": token },
                     contentType: "application/json",
                      success: function(result,status,jqXHR ){
-                        console.log(result);
                         getDocuments();
                      },
                      error(jqXHR, textStatus, errorThrown){
@@ -804,12 +781,6 @@ $(document).ready(function() {
             $('#qrHeading').text('Rev Code: ' + revCode);
             $('#qrcode').html('').qrcode(revCode);
             $('#qrModal').modal();
-
-        //     console.log(revCode);
-        // $.post('functions/workspace/getQR.php', {revCode: revCode}, function (data) {
-        //     console.log(data)
-        //
-        // });
 
         });
 

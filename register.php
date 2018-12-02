@@ -36,6 +36,24 @@
         <div class="row">
             <div class="inputDiv">
                 <span class='blocking-span'>
+                    <input id="name" type="text" name="name" class="inputText" required autocomplete="off"/>
+                    <hr>
+                    <span class="floating-label">Name</span>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="inputDiv">
+                <span class='blocking-span'>
+                    <input id="company" type="text" name="company" class="inputText" required autocomplete="off"/>
+                    <hr>
+                    <span class="floating-label">Company</span>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="inputDiv">
+                <span class='blocking-span'>
                     <input id="register-password" type="password" name="password" class="inputText" required autocomplete="off"/>
                     <hr>
                     <span class="floating-label">Password</span>

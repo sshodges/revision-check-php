@@ -7,23 +7,23 @@ include_once("functions/db.php");
 <head>
     <meta charset="UTF-8">
     <title>Workspace - THW</title>
-    <link rel="stylesheet" href="https://revisioncheck.com/assets/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/bootstrap/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="https://revisioncheck.com/assets/css/bootstrap/bootstrap.js"></script>
+    <script src="../assets/css/bootstrap/bootstrap.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="/revisioncheck2/assets/css/app.css">
-    <link rel="stylesheet" href="/revisioncheck2/assets/css/myaccount.css">
-    <link rel="stylesheet" href="/revisioncheck2/assets/css/font-awesome-4.7.0/css/font-awesome.min.css">
-    <script type="text/javascript" src="https://revisioncheck.com/assets/js/jquery.qrcode.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/app.css">
+    <link rel="stylesheet" href="../assets/css/myaccount.css">
+    <link rel="stylesheet" href="../assets/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" src="../assets/js/jquery.qrcode.min.js"></script>
 </head>
 <body>
 <div id="alert"></div>
 
 <div id="left-bar" class="col-sm-3">
-    <a id="brand"><img src="/revisioncheck2/assets/img/logo.png" class="logo"></a>
+    <a id="brand"><img src="../assets/img/logo.png" class="logo"></a>
     <ul class="" id="left-nav">
-        <li><a href="app/home">Home</a></li>
+        <li><a href="home">Home</a></li>
         <li><a href="archive">Archive</a></li>
         <li><a class="active" href="myaccount">My Account</a></li>
         <li id="logout" class=""><a href="">Logout</a></li>
@@ -156,7 +156,7 @@ include_once("functions/db.php");
     </div>
 </div>
 
-<script src="/revisioncheck2/assets/js/myaccount.js"></script>
+<script src="../assets/js/myaccount.js"></script>
 
 
 </body>

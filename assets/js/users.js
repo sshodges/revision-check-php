@@ -64,12 +64,17 @@ $(function() {
         if (testEmail.test(email)){
             var password = $('#register-password').val();
             var confirmPassword = $('#confirm-password').val();
+            var name = $('#name').val();
+            var company = $('#company').val();
+
 
             if (password.length > 6){
                 if (password === confirmPassword){
                   body = {};
                   body.email = email;
                   body.password = password;
+                  body.name = name;
+                  body.company = company;
                   body = JSON.stringify(body);
                   $.ajax({
                       url: urlStart + "/v1/users",

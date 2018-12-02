@@ -1,4 +1,4 @@
-$(document).ready(function() {
+urlStart + "$(document).ready(function() {
     var token;
     if (localStorage.getItem("token") === null) {
       window.location.replace('../login');
@@ -6,6 +6,8 @@ $(document).ready(function() {
       token = localStorage.getItem("token");
       $('body').show();
     }
+    var urlStart = "http://localhost:3000"
+
 
     //VARIABLES
         //Variables to hold when right clicking on row
@@ -48,7 +50,7 @@ $(document).ready(function() {
                 body.parent = drop;
                 body = JSON.stringify(body);
                 $.ajax({
-                    url: "http://localhost:3000/v1/"+dragType+"s/" + drag,
+                    url: urlStart + "/v1/"+dragType+"s/" + drag,
                     method: "PUT",
                     data: body,
                     dataType: 'json',
@@ -217,7 +219,7 @@ $(document).ready(function() {
               getDocuments();
             } else {
               $.ajax({
-                  url: "http://localhost:3000/v1/folders/"+parent,
+                  url: urlStart + "/v1/folders/"+parent,
                   method: "GET",
                   dataType: 'json',
                   headers: { "Auth": token },
@@ -232,7 +234,7 @@ $(document).ready(function() {
                      prevParent = result.responseJSON[0].parent;
                      if (prevParent !== 0) {
                        $.ajax({
-                           url: "http://localhost:3000/v1/folders/"+prevParent,
+                           url: urlStart + "/v1/folders/"+prevParent,
                            method: "GET",
                            dataType: 'json',
                            headers: { "Auth": token },
@@ -287,7 +289,7 @@ $(document).ready(function() {
                     var id = $(checks[i]).parent().next().attr('id');
 
                     async_request.push($.ajax({
-                        url:"http://localhost:3000/v1/documents/"+ids[id], // your url
+                        url:urlStart + "/v1/documents/"+ids[id], // your url
                         method:'put',
                         dataType: 'json',
                         data: body,
@@ -336,7 +338,7 @@ $(document).ready(function() {
             $('#documentName').val('');
 
             $.ajax({
-                url: "http://localhost:3000/v1/documents",
+                url: urlStart + "/v1/documents",
                 method: "POST",
                 data: body,
                 dataType: 'json',
@@ -359,7 +361,7 @@ $(document).ready(function() {
             $('#folderName').val('');
 
             $.ajax({
-                url: "http://localhost:3000/v1/folders",
+                url: urlStart + "/v1/folders",
                 method: "POST",
                 data: body,
                 dataType: 'json',
@@ -382,7 +384,7 @@ $(document).ready(function() {
             console.log(body);
             body = JSON.stringify(body);
             $.ajax({
-                url: "http://localhost:3000/v1/revisions/"+parent,
+                url: urlStart + "/v1/revisions/"+parent,
                 method: "POST",
                 data: body,
                 dataType: 'json',
@@ -407,7 +409,7 @@ $(document).ready(function() {
               $('.sad').html('')
             }
             $.ajax({
-                url: "http://localhost:3000/v1/folders/parent/"+parent,
+                url: urlStart + "/v1/folders/parent/"+parent,
                 method: "GET",
                 dataType: 'json',
                 headers: { "Auth": token },
@@ -432,7 +434,7 @@ $(document).ready(function() {
                  },
                  complete: function (){
                    $.ajax({
-                       url: "http://localhost:3000/v1/documents/parent/"+parent,
+                       url: urlStart + "/v1/documents/parent/"+parent,
                        method: "GET",
                        dataType: 'json',
                        headers: { "Auth": token },
@@ -481,7 +483,7 @@ $(document).ready(function() {
             $('.document-pill').hide();
             $('.revision-pill').show();
           $.ajax({
-              url: "http://localhost:3000/v1/revisions/"+parent,
+              url: urlStart + "/v1/revisions/"+parent,
               method: "GET",
               dataType: 'json',
               headers: { "Auth": token },
@@ -541,7 +543,7 @@ $(document).ready(function() {
           }
 
         $.ajax({
-           url: "http://localhost:3000/v1/archives",
+           url: urlStart + "/v1/archives",
            method: "GET",
            dataType: 'json',
            headers: { "Auth": token },
@@ -576,7 +578,7 @@ $(document).ready(function() {
           var rows = '<div class="col-xs-12" id="documentbar">';
 
           $.ajax({
-              url: "http://localhost:3000/v1/folders/search/"+searchTerm,
+              url: urlStart + "/v1/folders/search/"+searchTerm,
               method: "GET",
               dataType: 'json',
               headers: { "Auth": token },
@@ -598,7 +600,7 @@ $(document).ready(function() {
                },
                complete: function (){
                  $.ajax({
-                     url: "http://localhost:3000/v1/documents/search/"+searchTerm,
+                     url: urlStart + "/v1/documents/search/"+searchTerm,
                      method: "GET",
                      dataType: 'json',
                      headers: { "Auth": token },
@@ -634,7 +636,7 @@ $(document).ready(function() {
 
             if (clickedRowType == 'folder'){
               $.ajax({
-                  url: "http://localhost:3000/v1/folders/" + clickedId,
+                  url: urlStart + "/v1/folders/" + clickedId,
                   method: "PUT",
                   data: body,
                   dataType: 'json',
@@ -650,7 +652,7 @@ $(document).ready(function() {
               });
             } else {
               $.ajax({
-                  url: "http://localhost:3000/v1/documents/" + clickedId,
+                  url: urlStart + "/v1/documents/" + clickedId,
                   method: "PUT",
                   data: body,
                   dataType: 'json',
@@ -672,7 +674,7 @@ $(document).ready(function() {
           var parentId = []
           if (clickedRowType == "folder"){
             $.ajax({
-                url: "http://localhost:3000/v1/folders/children/"+clickedId,
+                url: urlStart + "/v1/folders/children/"+clickedId,
                 method: "POST",
                 dataType: 'json',
                 headers: { "Auth": token },
@@ -692,7 +694,7 @@ $(document).ready(function() {
                       console.log("id: ", ids[id]);
                       // you can push  any aysnc method handler
                       async_request.push($.ajax({
-                          url:"http://localhost:3000/v1/folders/"+ids[id], // your url
+                          url:urlStart + "/v1/folders/"+ids[id], // your url
                           method:'delete',
                           dataType: 'json',
                           headers: { "Auth": token },
@@ -703,7 +705,7 @@ $(document).ready(function() {
                           }
                       }));
                       async_request.push($.ajax({
-                          url:"http://localhost:3000/v1/documents/parent/"+ids[id], // your url
+                          url:urlStart + "/v1/documents/parent/"+ids[id], // your url
                           method:'put',
                           dataType: 'json',
                           headers: { "Auth": token },
@@ -731,7 +733,7 @@ $(document).ready(function() {
             body.status = false;
             body = JSON.stringify(body);
             $.ajax({
-                url: "http://localhost:3000/v1/documents/" + clickedId,
+                url: urlStart + "/v1/documents/" + clickedId,
                 method: "PUT",
                 data: body,
                 dataType: 'json',
@@ -774,7 +776,7 @@ $(document).ready(function() {
                 console.log(drop);
                 console.log(dragType);
                 $.ajax({
-                    url: "http://localhost:3000/v1/"+dragType+"s/" + drag,
+                    url: urlStart + "/v1/"+dragType+"s/" + drag,
                     method: "PUT",
                     data: body,
                     dataType: 'json',

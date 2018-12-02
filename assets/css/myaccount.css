@@ -56,6 +56,31 @@ hr {
 
 #passwordButton {
     margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#subuserDetails {
+}
+
+#subuserButtonDiv{
+  margin-top: 10px;
+}
+
+#subuserHeading {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-top: 40px;
+  margin-bottom: 10px;
+  color: #333
+}
+
+.subuserItem {
+  margin-top: 20px;
+  padding-left: 5px;
+}
+
+.subuserName {
+
 }
 
 #change-error {
@@ -86,8 +111,8 @@ hr {
         width: 100%;
     }
 
-    #passwordButtonDiv {
-        margin: 0 auto;
+    #passwordButtonDiv, #subuserButtonDiv {
+        margin: 5px auto;
         width: 70%;
     }
 }

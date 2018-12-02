@@ -5,6 +5,7 @@ $(function() {
   } else {
     $('body').show();
   }
+  var urlStart = "http://localhost:3000"
 
     var testEmail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
 
@@ -35,7 +36,7 @@ $(function() {
 
 
             $.ajax({
-                url: "http://localhost:3000/v1/users/login",
+                url: urlStart + "/v1/users/login",
                 method: "POST",
                 data: body,
                 dataType: 'json',
@@ -71,7 +72,7 @@ $(function() {
                   body.password = password;
                   body = JSON.stringify(body);
                   $.ajax({
-                      url: "http://localhost:3000/v1/users",
+                      url: urlStart + "/v1/users",
                       method: "POST",
                       data: body,
                       dataType: 'json',

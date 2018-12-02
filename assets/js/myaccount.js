@@ -1,5 +1,8 @@
 $( document ).ready(function() {
     var token;
+
+    var urlStart = "http://localhost:3000"
+
     if (localStorage.getItem("token") === null) {
       window.location.replace('../login')
     } else {
@@ -16,7 +19,7 @@ $( document ).ready(function() {
     });
 
     $('#nameModal').on('shown.bs.modal', function () {
-        $('#firstName').focus();
+        $('#nameInput').focus();
     });
 
     $('#companyModal').on('shown.bs.modal', function () {
@@ -35,7 +38,7 @@ $( document ).ready(function() {
         }
     });
 
-    $('#lastName').keypress(function (e) {
+    $('#nameInput').keypress(function (e) {
         var key = e.which;
         if(key == 13)  // the enter key code
         {
@@ -53,10 +56,17 @@ $( document ).ready(function() {
 
     $("#changeName").click(function () {
         var attributes = {}
-        attributes.firstName = $('#firstName').val();
-        attributes.lastName = $('#lastName').val();
+        attributes.name = $('#nameInput').val();
         changeCompany(attributes);
         $('#nameModal').modal('toggle');
+
+    });
+
+    $("#addSubuser").click(function () {
+        var attributes = {}
+        attributes.email = $('#email').val();
+        addSubuser(attributes);
+        $('#subuserModal').modal('toggle');
 
     });
 
@@ -70,7 +80,7 @@ $( document ).ready(function() {
     changeCompany = function (attributes) {
       attributes = JSON.stringify(attributes);
       $.ajax({
-          url: "http://localhost:3000/v1/users",
+          url: urlStart + "/v1/users",
           method: "PUT",
           data: attributes,
           dataType: 'json',
@@ -86,23 +96,68 @@ $( document ).ready(function() {
       });
     }
 
-    getDetails = function () {
+    addSubuser = function (attributes) {
+      attributes = JSON.stringify(attributes);
       $.ajax({
-          url: "http://localhost:3000/v1/users",
+          url: urlStart + "/v1/users/subuser",
+          method: "POST",
+          data: attributes,
+          dataType: 'json',
+          headers: { "Auth": token },
+          contentType: "application/json",
+           success: function(result,status,jqXHR ){
+              console.log(result);
+              getSubusers();
+           },
+           error(jqXHR, textStatus, errorThrown){
+             console.log(errorThrown);
+           }
+      });
+    }
+
+    getSubusers = function () {
+      $.ajax({
+          url: urlStart + "/v1/users/subuser",
           method: "GET",
           dataType: 'json',
           headers: { "Auth": token },
           contentType: "application/json",
            success: function(result,status,jqXHR ){
-             if (result.firstName && result.lastName){
-               $('#nameText').html(result.firstName + " " + result.lastName);
-               $('#firstName').val(result.firstName);
-               $('#lastName').val(result.lastName);
+             var html = ''
+             if (result.length > 0){
+               html += "<h5 id='subuserHeading'>Team Members</h5>"
+               result.forEach(function(element) {
+                 html += '<div class="subuserItem">'
+                 console.log(element);
+                 html += '<h5 class="subuserName">'+element.email+'</h5>'
+
+                 html += '</div>'
+               });
+               $('#subuserDetails').html(html)
+             }
+           },
+           error(jqXHR, textStatus, errorThrown){
+             console.log(errorThrown);
+           }
+      });
+    }
+    getSubusers();
+
+    getDetails = function () {
+      $.ajax({
+          url: urlStart + "/v1/users",
+          method: "GET",
+          dataType: 'json',
+          headers: { "Auth": token },
+          contentType: "application/json",
+           success: function(result,status,jqXHR ){
+             if (result.name){
+               $('#nameText').html(result.name);
+               $('#name').val(result.name);
 
              } else {
                $('#nameText').html('');
-               $('#firstName').val('');
-               $('#lastName').val('');
+               $('#name').val('');
              }
              if (result.company) {
                $('#companyText').html(result.company);
@@ -131,7 +186,7 @@ $( document ).ready(function() {
               attributes.newPassword = newPassword;
               attributes = JSON.stringify(attributes);
               $.ajax({
-                  url: "http://localhost:3000/v1/users/change-password",
+                  url: urlStart + "/v1/users/change-password",
                   method: "PUT",
                   data: attributes,
                   dataType: 'json',

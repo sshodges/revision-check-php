@@ -3,6 +3,7 @@ $( document ).ready(function() {
     $('#checkRevCodeLink').click(function () {
         $("#revcheck-modal").modal();
     });
+    
 
     var currentYear = (new Date).getFullYear();
     $('#copyright').text('Copyright © '+ currentYear +' Revision Check');

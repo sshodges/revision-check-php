@@ -54,18 +54,35 @@ include_once("functions/db.php");
             <div id="passwordButtonDiv">
                 <div id="passwordButton" class="btn btn-default" onclick="$('#passwordModal').modal('show');">Change Password</div>
             </div>
+            <div id="subuserButtonDiv">
+                <div id="subuserButton" class="btn btn-default" onclick="$('#subuserModal').modal('show');">Add Team Member</div>
+            </div>
+            <div id=subuserDetails></div>
 
 
+
+            <div class="modal fade" id="subuserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="inputHolder">
+                                <input id="email" type="email" placeholder="Email Address" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="buttonHolder">
+                            <button type="button" class="btn btn-primary" id="addSubuser">Add</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="modal fade" id="nameModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-body">
                             <div class="inputHolder">
-                                <input id="firstName" type="text" placeholder="First Name" autocomplete="off">
-                            </div>
-                            <div class="inputHolder">
-                                <input id="lastName" type="text" placeholder="Last Name" autocomplete="off">
+                                <input id="nameInput" type="text" placeholder="Name" autocomplete="off">
                             </div>
                         </div>
                         <div class="buttonHolder">

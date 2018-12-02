@@ -82,6 +82,7 @@ $(function() {
                             window.location.replace('verify')
                        },
                        error(jqXHR, textStatus, errorThrown){
+                         console.log(errorThrown);
                            $("#login-error").text('Incorrect email or password');
                            $('#register-submit').show();
 

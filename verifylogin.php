@@ -8,10 +8,6 @@ if ($db->connect_error) {
 
 if(!empty($_GET['confirmcode'])) {
     $confirmcode = $_GET['confirmcode'];
-
-    $stmt = $db->prepare('UPDATE accounts SET confirmed=\'\' WHERE confirmed=?');
-    $stmt->bind_param('s', $confirmcode); // 's' specifies the variable type => 'string'
-    $stmt->execute();
 } else {
     header("Location: 404");
 }
@@ -67,14 +63,18 @@ if(!empty($_GET['confirmcode'])) {
     </div>
 </nav>
 <!-- end navigation -->
-<h4 style="width: 80%; margin: 0 auto; margin-top: 250px; text-align: center">
+<h4 id="success" style="width: 80%; margin: 0 auto; margin-top: 250px; text-align: center; display:none">
     Your Account is verified!
-    Click <a href="login" style="color: #1CA347">here</a> to go back to the login page</h4>
+    Click <a href="login" style="color: #1CA347">here</a> to go back to the login page
+</h4>
+<h4 id="fail" style="width: 80%; margin: 0 auto; margin-top: 250px; text-align: center; display:none">An error occured, please try again</h4>
 
 <script src="assets/js/jquery.js"></script>
+<script>
+    var confirmCode = "<?php echo $confirmcode; ?>";
+</script>
 
-
-<script src="assets/js/passwordreset.js"></script>
+<script src="assets/js/verifylogin.js"></script>
 
 </body>
 </html>

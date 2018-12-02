@@ -8,6 +8,9 @@ $( document ).ready(function() {
         $("#loading").css("display", "none");
     });
 
+    var urlStart = "http://localhost:3000"
+
+
     $('#resetEmail').keypress(function (e) {
         var key = e.which;
         if(key == 13)  // the enter key code
@@ -17,16 +20,24 @@ $( document ).ready(function() {
     });
 
     $("#resetPassword").click(function () {
-        $("#resetPassword").hide();
-        var email = $('#resetEmail').val();
-        $.post('functions/resetpassword.php', {email:email}, function (data) {
-            if (data === ''){
-                window.location.replace("verifyforgot");
-            } else {
-                $('#forgot-error').text(data);
-                $("#resetPassword").show();
-            }
-        });
+      var attributes = {}
+      attributes.email = $('#resetEmail').val();
+      attributes = JSON.stringify(attributes);
+      $.ajax({
+          url: urlStart + "/v1/users/forgot-password",
+          method: "PUT",
+          data: attributes,
+          dataType: 'json',
+          contentType: "application/json",
+           success: function(result,status,jqXHR ){
+              console.log(result);
+              window.location.replace('verify')
+
+           },
+           error(jqXHR, textStatus, errorThrown){
+             console.log(errorThrown);
+           }
+      });
     });
 
 });

@@ -8,14 +8,7 @@ if ($db->connect_error) {
 
 if(!empty($_GET['resetCode'])) {
     $resetCode = $_GET['resetCode'];
-    $result = $db->query("SELECT * FROM accounts WHERE reset_code='$resetCode'");
-    if ($result->num_rows == 1) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            $userId = $row['id'];
-        }
-    } else {
-        header("Location: expired");
-    }
+
 } else {
     header("Location: 404");
 }
@@ -72,7 +65,7 @@ if(!empty($_GET['resetCode'])) {
 
 <script src="assets/js/passwordreset.js"></script>
 <script>
-    var userId = <?php echo $userId; ?>;
+    var resetCode = "<?php echo $resetCode; ?>";
 </script>
 
 </body>

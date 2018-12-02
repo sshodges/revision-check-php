@@ -1,4 +1,4 @@
-urlStart + "$(document).ready(function() {
+$(document).ready(function() {
     var token;
     if (localStorage.getItem("token") === null) {
       window.location.replace('../login');
@@ -731,6 +731,7 @@ urlStart + "$(document).ready(function() {
           } else {
             var body = {};
             body.status = false;
+            body.parent = 0;
             body = JSON.stringify(body);
             $.ajax({
                 url: urlStart + "/v1/documents/" + clickedId,

@@ -18,6 +18,7 @@ if(isset($_SESSION['idd'])){
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="assets/css/login.css">
     <link rel="icon" href="assets/img/icon.png">
+    <script type="text/javascript" src="assets/js/url.js"></script>
 
 </head>
 <body style="display: none">

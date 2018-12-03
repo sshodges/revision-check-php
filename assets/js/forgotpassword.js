@@ -8,9 +8,6 @@ $( document ).ready(function() {
         $("#loading").css("display", "none");
     });
 
-    var urlStart = "http://localhost:3000"
-
-
     $('#resetEmail').keypress(function (e) {
         var key = e.which;
         if(key == 13)  // the enter key code

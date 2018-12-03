@@ -1,7 +1,5 @@
 $( document ).ready(function() {
 
-    var urlStart = "http://localhost:3000"
-
 
     $('#join').click(function () {
       if ($('#newPassword').val() === $('#confirmPassword').val()){

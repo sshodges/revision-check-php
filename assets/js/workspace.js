@@ -6,8 +6,6 @@ $(document).ready(function() {
       token = localStorage.getItem("token");
       $('body').show();
     }
-    var urlStart = "http://localhost:3000"
-
 
     //VARIABLES
         //Variables to hold when right clicking on row

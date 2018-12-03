@@ -1,8 +1,5 @@
 $( document ).ready(function() {
 
-    var urlStart = "http://localhost:3000"
-
-
     $('#resetPassword').click(function () {
       if ($('#newPassword').val() === $('#confirmPassword').val()){
         var attributes = {}

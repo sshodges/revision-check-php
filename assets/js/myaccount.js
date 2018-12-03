@@ -1,8 +1,6 @@
 $( document ).ready(function() {
     var token;
 
-    var urlStart = "http://localhost:3000"
-
     if (localStorage.getItem("token") === null) {
       window.location.replace('../login')
     } else {

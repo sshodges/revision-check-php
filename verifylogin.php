@@ -23,6 +23,7 @@ if(!empty($_GET['confirmcode'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="keywords" content="">
     <meta name="description" content="A document management system that allows users to easily see if the document they are using is the most up-to-date version. This is used via unique revision code generation and easily scanned QR codes">
+    <script type="text/javascript" src="assets/js/url.js"></script>
 
     <!-- animate css -->
     <link rel="stylesheet" href="assets/css/animate.min.css">

@@ -8,7 +8,6 @@ $(document).ready(function() {
     }
 
     //VARIABLES
-      var urlStart = "http://localhost:3000"
 
         //Variables to hold when right clicking on row
         var clickedId;

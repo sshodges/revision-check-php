@@ -20,6 +20,7 @@ if(isset($_SESSION['idd'])){
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="assets/css/users.css">
+    <script type="text/javascript" src="assets/js/url.js"></script>
 
 </head>
 <body>

@@ -22,6 +22,10 @@ $( document ).ready(function() {
         $('#nameInput').focus();
     });
 
+    $('#subuserModal').on('shown.bs.modal', function () {
+        $('#email').focus();
+    });
+
     $('#companyModal').on('shown.bs.modal', function () {
         $('#companyName').focus();
     });
@@ -35,6 +39,14 @@ $( document ).ready(function() {
         if(key == 13)  // the enter key code
         {
             $('#changeCompany').click();
+        }
+    });
+
+    $('#email').keypress(function (e) {
+        var key = e.which;
+        if(key == 13)  // the enter key code
+        {
+            $('#addSubuser').click();
         }
     });
 
@@ -127,9 +139,17 @@ $( document ).ready(function() {
              if (result.length > 0){
                html += "<h5 id='subuserHeading'>Team Members</h5>"
                result.forEach(function(element) {
+                 console.log(element.name);
                  html += '<div class="subuserItem">'
-                 console.log(element);
-                 html += '<h5 class="subuserName">'+element.email+'</h5>'
+                 var email = element.email;
+                 if (element.name){
+                   email = email + " (" + element.name + ")"
+                 }
+
+                 if (!element.active){
+                   email = email + " <strong style='color: red;'>(Not Activated)</strong>"
+                 }
+                 html += '<h5 class="subuserName">'+email+'</h5>'
 
                  html += '</div>'
                });

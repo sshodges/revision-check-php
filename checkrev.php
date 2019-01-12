@@ -1,45 +1,42 @@
 <?php
 
-include_once("functions/db.php");
+$status = '';
 
 if(!empty($_GET['revcode'])) {
     $revcode = $_GET['revcode'];
-
-    $stmt = $db->prepare('SELECT * FROM revisions WHERE revCode=?');
-    $stmt->bind_param('s', $revcode); // 's' specifies the variable type => 'string'
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $s = curl_init();
+    curl_setopt($s,CURLOPT_URL,'https://api.revisioncheck.com/v1/revcodes/' . $revcode);
+    curl_setopt($s, CURLOPT_RETURNTRANSFER, TRUE);
 
 
-    if ($result->num_rows > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            $status = $row['status'];
-            $revision = $row['revision'];
-            $documentId = $row['documentId'];
-            $stmt = $db->prepare('SELECT * FROM documents WHERE id=?');
-            $stmt->bind_param('s', $documentId); // 's' specifies the variable type => 'string'
-            $stmt->execute();
-            $result = $stmt->get_result();
+    $result = curl_exec($s);
+    curl_close($s);
+    $json = json_decode($result, TRUE);
 
-            if ($result->num_rows > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $documentName = $row['docName'];
-                    if($row['status'] == 'active'){
-                        $warning = '';
-                    } else {
-                        $warning = 'This document has been archived. The information may not be current';
-                    }
-                }
-            }
-            if ($status == 'latest'){
-                $template = 'templates/latest.php';
-            } else {
-                $template = 'templates/old.php';
-            }
+    echo isset($json);
+    if (isset($json)){
+        if ( (int)($json['latest']) == 1){
+            $template = 'templates/latest.php';
+        } else {
+            $template = 'templates/old.php';
         }
+        $revision = $json['name'];
+        $documentId = $json['documentId'];
+
+        $s = curl_init();
+        curl_setopt($s,CURLOPT_URL,'https://api.revisioncheck.com/v1/documents/' . $documentId);
+        curl_setopt($s, CURLOPT_RETURNTRANSFER, TRUE);
+        $result = curl_exec($s);
+        curl_close($s);
+        $json = json_decode($result, TRUE);
+        $documentName = $json['name'];
+
     } else {
         $template = 'templates/notfound.php';
     }
+
+
+
 }
 
 ?>
@@ -67,4 +64,3 @@ if(!empty($_GET['revcode'])) {
 
 </body>
 </html>
-

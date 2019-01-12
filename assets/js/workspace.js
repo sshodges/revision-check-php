@@ -777,7 +777,7 @@ $(document).ready(function() {
         $('body').on("click",'.downloadQR', function(){
             revCode = $(this).attr('id');
             $('#qrHeading').text('Rev Code: ' + revCode);
-            $('#qrcode').html('').qrcode(revCode);
+            $('#qrcode').html('').qrcode("https://revisioncheck.com/checkrev?revcode=" + revCode);
             $('#qrModal').modal();
 
         });

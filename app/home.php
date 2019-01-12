@@ -1,10 +1,4 @@
 <?php
-include_once("../functions/db.php");
-
-session_start();
-
-
-
 
 ?>
 
@@ -54,9 +48,9 @@ session_start();
     <div id="content-bar" class="row">
         <div id="add-bar" class="col-md-2 col-xs-12">
             <ul class="addButtons" id="top-bar">
-                <li role="presentation" id="newFolder" class="document-pill launch-modal" data-toggle="modal" data-target="#folderModal" holder="#folderModal" style="display: <?php echo $displayDoc; ?>"><a>New&nbsp;Folder</a></li>
-                <li role="presentation" id="newDocument" class="document-pill launch-modal" data-toggle="modal" data-target="#documentModal" holder="#documentModal" style="display: <?php echo $displayDoc; ?>"><a>New&nbsp;Document</a></li>
-                <li role="presentation" id="newRevision" class="revision-pill launch-modal" data-toggle="modal" data-target="#revisionModal" holder="#revisionModal" style="display: <?php echo $displayRev; ?>"><a>New&nbsp;Revision</a></li>
+                <li role="presentation" id="newFolder" class="document-pill launch-modal" data-toggle="modal" data-target="#folderModal" holder="#folderModal"><a>New&nbsp;Folder</a></li>
+                <li role="presentation" id="newDocument" class="document-pill launch-modal" data-toggle="modal" data-target="#documentModal" holder="#documentModal"><a>New&nbsp;Document</a></li>
+                <li role="presentation" id="newRevision" class="revision-pill launch-modal" data-toggle="modal" data-target="#revisionModal" holder="#revisionModal"><a>New&nbsp;Revision</a></li>
             </ul>
             <ul class="addButtons" id="editDocument" style="display: none">
                 <li role="presentation" id="renameButton" class="document-pill"><a>Rename</a></li>

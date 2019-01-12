@@ -88,6 +88,30 @@ hr {
     color: #c61836;
 }
 
+/* Loading */
+
+.modalLoading {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+
+    height:     100%;
+    width:      100vw;
+    background: rgba( 255, 255, 255, .8 )
+                url('http://sampsonresume.com/labs/pIkfp.gif')
+                30% 20%
+                no-repeat;
+}
+
+#content-bar .loading {
+    overflow: hidden;
+}
+
+#content-bar .loading .modalLoading {
+    display: block;
+}
+
+
 @media (max-width: 1200px) {
     .modal-dialog {
         width: 50%;

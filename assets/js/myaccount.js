@@ -1,6 +1,19 @@
 $( document ).ready(function() {
     var token;
 
+    $(document).on({
+
+      ajaxStart: function() {
+        $("#content-bar").addClass("loading");
+        $('.modalLoading').show();
+      },
+      ajaxStop: function() {
+        $("#content-bar").removeClass("loading");
+        $('.modalLoading').hide();
+
+      }
+    });
+
     if (localStorage.getItem("token") === null) {
       window.location.replace('../login')
     } else {

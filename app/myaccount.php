@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <title>Workspace - THW</title>
     <link rel="stylesheet" href="../assets/css/bootstrap/bootstrap.min.css">
-    <script type="text/javascript" src="../assets/js/url.js"></script> 
+    <script type="text/javascript" src="../assets/js/url.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="../assets/css/bootstrap/bootstrap.js"></script>
@@ -32,6 +32,8 @@
 <div id="right-bar" class="col-sm-9">
 
     <div id="content-bar" class="row">
+        <div class="modalLoading"></div>
+
         <div id="container">
             <div class="row item-account">
                 <div class="col-xs-3">

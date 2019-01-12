@@ -1,7 +1,3 @@
-<?php
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -206,8 +202,6 @@
         </div>
     </div>
 <script src="../assets/js/workspace.js"></script>
-
-
 
 </body>
 </html>

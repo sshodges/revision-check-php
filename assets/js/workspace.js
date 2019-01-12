@@ -407,7 +407,7 @@ $(document).ready(function() {
                                     <input type="checkbox" class="form-check-input" style="display: none;">\
                                 </div>\
                                 <div class="item-row" id="'+folder.id+'" row-type="folder">\
-                                    <img class="img-responsive icon" src="/revisioncheck2/assets/img/folder.png">'+folder.name+'</div>\
+                                    <img class="img-responsive icon" src="../assets/img/folder.png">'+folder.name+'</div>\
                                  </div>';
                       });
                  },
@@ -432,7 +432,7 @@ $(document).ready(function() {
                                           <input type="checkbox" class="form-check-input" style="display: none;">\
                                       </div>\
                                       <div class="item-row" id="'+documents.id+'" row-type="document">\
-                                          <img class="img-responsive icon" src="/revisioncheck2/assets/img/document.png">\
+                                          <img class="img-responsive icon" src="../assets/img/document.png">\
                                           '+documents.name+'</div>\
                                        </div>';
                             });
@@ -489,10 +489,10 @@ $(document).ready(function() {
                                               <p class="textItem" style="text-align: center">'+revision.uniqueCode+'</p>\
                                            </div>\
                                            <div class="col-xs-3">\
-                                              <p class="textItem downloadQR" id="'+revision.id+'" style="text-align: center">View</p>\
+                                              <p class="textItem downloadQR" id="'+revision.uniqueCode+'" style="text-align: center">View</p>\
                                            </div>\
                                            <div class="col-xs-1">\
-                                              <img class="img-responsive rev-icon" src="https://revisioncheck.com/assets/img/'+latest+'.png">\
+                                              <img class="img-responsive rev-icon" src="../assets/img/'+latest+'.png">\
                                            </div>\
                                        </div>\
                                    </div>';
@@ -541,7 +541,7 @@ $(document).ready(function() {
                               <input type="checkbox" class="form-check-input" style="display: none;">\
                           </div>\
                           <div class="item-row" id="'+documents.id+'" row-type="document">\
-                              <img class="img-responsive icon" src="/revisioncheck2/assets/img/document.png">\
+                              <img class="img-responsive icon" src="../assets/img/document.png">\
                               '+documents.name+'</div>\
                            </div>';
                 });
@@ -576,7 +576,7 @@ $(document).ready(function() {
                                   <input type="checkbox" class="form-check-input" style="display: none;">\
                               </div>\
                               <div class="item-row" id="'+folder.id+'" row-type="folder">\
-                                  <img class="img-responsive icon" src="/revisioncheck2/assets/img/folder.png">'+folder.name+'</div>\
+                                  <img class="img-responsive icon" src="../assets/img/folder.png">'+folder.name+'</div>\
                                </div>';
                     });
 
@@ -598,7 +598,7 @@ $(document).ready(function() {
                                         <input type="checkbox" class="form-check-input" style="display: none;">\
                                     </div>\
                                     <div class="item-row" id="'+documents.id+'" row-type="document">\
-                                        <img class="img-responsive icon" src="/revisioncheck2/assets/img/document.png">\
+                                        <img class="img-responsive icon" src="../assets/img/document.png">\
                                         '+documents.name+'</div>\
                                      </div>';
                           });

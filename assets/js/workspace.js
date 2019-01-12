@@ -6,6 +6,18 @@ $(document).ready(function() {
       token = localStorage.getItem("token");
       $('body').show();
     }
+    $(document).on({
+
+      ajaxStart: function() {
+        $("#content-bar").addClass("loading");
+        $('.modalLoading').show();
+      },
+      ajaxStop: function() {
+        $("#content-bar").removeClass("loading");
+        $('.modalLoading').hide();
+
+      }
+    });
 
     //VARIABLES
         //Variables to hold when right clicking on row

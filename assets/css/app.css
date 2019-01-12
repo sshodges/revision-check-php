@@ -225,15 +225,15 @@ a:hover {
         width: 100%;
         overflow: hidden;
     }
-    
+
 #qrHeading {
     text-align: center;
-}    
-    
+}
+
 #qrModal .modal-content {
     text-align: center;
 }
-    
+
 #qrButton {
     margin-bottom: 20px;
 }
@@ -248,14 +248,35 @@ a:hover {
     cursor: hand;
 }
 
+/* Loading */
+
+.modalLoading {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+
+    height:     100%;
+    width:      100vw;
+    background: rgba( 255, 255, 255, .8 )
+                url('http://sampsonresume.com/labs/pIkfp.gif')
+                30% 20%
+                no-repeat;
+}
+
+#content-bar .loading {
+    overflow: hidden;
+}
+
+#content-bar .loading .modalLoading {
+    display: block;
+}
 
 
-    
-    
-    
-    
-    
-    
+
+
+
+
+
 
 @media only screen and (min-width: 991px) {
     #add-bar {

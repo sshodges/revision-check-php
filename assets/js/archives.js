@@ -7,6 +7,19 @@ $(document).ready(function() {
 
     }
 
+    $(document).on({
+
+      ajaxStart: function() {
+        $("#content-bar").addClass("loading");
+        $('.modalLoading').show();
+      },
+      ajaxStop: function() {
+        $("#content-bar").removeClass("loading");
+        $('.modalLoading').hide();
+
+      }
+    });
+
     //VARIABLES
 
         //Variables to hold when right clicking on row
@@ -205,59 +218,6 @@ $(document).ready(function() {
 
         });
 
-        $('body').on("click",'.previous-breadcrumb', function(){
-            parent = $(this).attr('id');
-            currentName = prevName;
-            if (parent === "0"){
-              prevName = "Home";
-              getBreadcrumbs();
-              getDocuments();
-            } else {
-              $.ajax({
-                  url: urlStart + "/v1/folders/"+parent,
-                  method: "GET",
-                  dataType: 'json',
-                  headers: { "Auth": token },
-                  contentType: "application/json",
-                   success: function(result,status,jqXHR ){
-                      getDocuments();
-                   },
-                   error(jqXHR, textStatus, errorThrown){
-                     console.log(errorThrown);
-                   },
-                   complete: function (result,status,jqXHR ) {
-                     prevParent = result.responseJSON[0].parent;
-                     if (prevParent !== 0) {
-                       $.ajax({
-                           url: urlStart + "/v1/folders/"+prevParent,
-                           method: "GET",
-                           dataType: 'json',
-                           headers: { "Auth": token },
-                           contentType: "application/json",
-                            success: function(result,status,jqXHR ){
-
-                            },
-                            error(jqXHR, textStatus, errorThrown){
-                              console.log(errorThrown);
-                            },
-                            complete: function (result,status,jqXHR ) {
-
-
-                              prevName = result.responseJSON[0].name;
-                              getBreadcrumbs();
-
-                            }
-                         });
-                     } else {
-                       prevName = "Home";
-                       getBreadcrumbs();
-                     }
-
-                   }
-                });
-            }
-
-            });
 
         $('#renameButton').click(function () {
             $('#renameTitle').text('Rename '+ clickedRowType);
@@ -326,208 +286,6 @@ $(document).ready(function() {
 
     //FUNCTIONS
 
-        addDocument = function () {
-            var body = {}
-            body.name = $('#documentName').val();
-            body.parent = parent;
-            body = JSON.stringify(body);
-
-            $('#documentName').val('');
-
-            $.ajax({
-                url: urlStart + "/v1/documents",
-                method: "POST",
-                data: body,
-                dataType: 'json',
-                headers: { "Auth": token },
-                contentType: "application/json",
-                 success: function(result,status,jqXHR ){
-                      getDocuments();
-                 },
-                 error(jqXHR, textStatus, errorThrown){
-                     console.log(errorThrown);
-                 }
-            });
-        };
-        addFolder = function () {
-            var body = {}
-            body.name = $('#folderName').val();
-            body.parent = parent;
-            body = JSON.stringify(body);;
-
-            $('#folderName').val('');
-
-            $.ajax({
-                url: urlStart + "/v1/folders",
-                method: "POST",
-                data: body,
-                dataType: 'json',
-                headers: { "Auth": token },
-                contentType: "application/json",
-                 success: function(result,status,jqXHR ){
-                      getDocuments();
-                 },
-                 error(jqXHR, textStatus, errorThrown){
-                     console.log(errorThrown);
-                 }
-            });
-        };
-
-        addRevision = function () {
-
-            var body = {}
-            body.name = $('#revisionName').val().toString();
-            $('#revisionName').val('');
-            console.log(body);
-            body = JSON.stringify(body);
-            $.ajax({
-                url: urlStart + "/v1/revisions/"+parent,
-                method: "POST",
-                data: body,
-                dataType: 'json',
-                headers: { "Auth": token},
-                contentType: "application/json",
-                 success: function(result,status,jqXHR ){
-                      getRevisions();
-                 },
-                 error(jqXHR, textStatus, errorThrown) {
-                     $("#login-error").text('Incorrect email or password');
-                 }
-            });
-            getRevisions();
-        };
-
-        getDocuments = function (){
-            $('#revisionHeading').hide();
-            $('.document-pill').show();
-            $('.revision-pill').hide();
-            var rows = '<div class="col-xs-12" id="documentbar">';
-            if (parent === "0"){
-              $('.sad').html('')
-            }
-            $.ajax({
-                url: urlStart + "/v1/folders/parent/"+parent,
-                method: "GET",
-                dataType: 'json',
-                headers: { "Auth": token },
-                contentType: "application/json",
-                 success: function(result,status,jqXHR ){
-                      result.forEach(function (folder) {
-                        rows += '<div class="row item sortable">\
-                                <div class="col checkbox">\
-                                    <input type="checkbox" class="form-check-input" style="display: none;">\
-                                </div>\
-                                <div class="item-row" id="'+folder.id+'" row-type="folder">\
-                                    <img class="img-responsive icon" src="/revisioncheck2/assets/img/folder.png">'+folder.name+'</div>\
-                                 </div>';
-                      });
-
-                 },
-                 error(jqXHR, textStatus, errorThrown){
-                   console.log(errorThrown);
-                 },
-                 complete: function (){
-                   $.ajax({
-                       url: urlStart + "/v1/documents/parent/"+parent,
-                       method: "GET",
-                       dataType: 'json',
-                       headers: { "Auth": token },
-                       contentType: "application/json",
-                        success: function(result,status,jqXHR ){
-                            result.forEach(function (documents) {
-                              rows += '<div class="row item sortable">\
-                                      <div class="col checkbox">\
-                                          <input type="checkbox" class="form-check-input" style="display: none;">\
-                                      </div>\
-                                      <div class="item-row" id="'+documents.id+'" row-type="document">\
-                                          <img class="img-responsive icon" src="/revisioncheck2/assets/img/document.png">\
-                                          '+documents.name+'</div>\
-                                       </div>';
-                            });
-                            rows += '</div>';
-                            $('#documentrow').html(rows);
-                           makeDroppable();
-
-                        },
-                        error(jqXHR, textStatus, errorThrown){
-                          console.log(errorThrown);
-                        }
-                   });
-                 }
-            });
-
-
-
-        };
-
-        getRevisions = function () {
-            var rows = '<div class="col-xs-12" id="documentbar">\
-            <div class="row">\
-                <div class="col-xs-12" id="revisionHeading">\
-                    <div class="col-xs-5">Revision</div>\
-                    <div class="col-xs-3" style="text-align: center">Rev Code</div>\
-                    <div class="col-xs-3" style="text-align: center">QR Code</div>\
-                    <div class="col-xs-1" style="text-align: center">Status</div>\
-                </div>\
-            </div>';
-            $('#revisionHeading').show();
-            $('#documentHeading').hide();
-
-            $('.document-pill').hide();
-            $('.revision-pill').show();
-          $.ajax({
-              url: urlStart + "/v1/revisions/"+parent,
-              method: "GET",
-              dataType: 'json',
-              headers: { "Auth": token },
-              contentType: "application/json",
-               success: function(result,status,jqXHR ){
-                   result.forEach(function (revision) {
-                     var latest = 'old';
-                     if (revision.latest === true) {
-                       latest = 'latest';
-                     }
-                     rows += '        <div class="row sortable" id="%s">\
-                                       <div class="col-xs-12 rev-item">\
-                                           <div class="col-xs-5">\
-                                              <p class="textItem revisionText">'+revision.name+'</p>\
-                                           </div>\
-                                           <div class="col-xs-3">\
-                                              <p class="textItem" style="text-align: center">'+revision.uniqueCode+'</p>\
-                                           </div>\
-                                           <div class="col-xs-3">\
-                                              <p class="textItem downloadQR" id="'+revision.id+'" style="text-align: center">View</p>\
-                                           </div>\
-                                           <div class="col-xs-1">\
-                                              <img class="img-responsive rev-icon" src="https://revisioncheck.com/assets/img/'+latest+'.png">\
-                                           </div>\
-                                       </div>\
-                                   </div>';
-                   });
-                   rows += '</div>';
-                   $('#documentrow').html(rows);
-                   $('#revisionHeading').show();
-                   $('#documentHeading').hide();
-
-                   $('.document-pill').hide();
-                   $('.revision-pill').show();
-
-
-               },
-               error(jqXHR, textStatus, errorThrown){
-                 console.log(errorThrown);
-               }
-          });
-
-        };
-
-        getBreadcrumbs = function () {
-          $('#back').html('<ol class="breadcrumb">\
-              <li class="breadcrumb-item previous-breadcrumb" id="'+prevParent+'"><a class="sad">'+prevName+'</a></li>\
-              <li class="breadcrumb-item active" id="currentBread">'+currentName+'</li>\
-          </ol>');
-
-        }
 
         getArchives = function (){
           var rows = '<div class="col-xs-12" id="documentbar">';
@@ -548,7 +306,7 @@ $(document).ready(function() {
                                 <input type="checkbox" class="form-check-input archiveChecks" style="display: none;">\
                             </div>\
                             <div class="" id="'+documents.id+'" row-type="archive">\
-                                <img class="img-responsive icon" src="/revisioncheck2/assets/img/archive.png">\
+                                <img class="img-responsive icon" src="../assets/img/archive.png">\
                                 '+documents.name+'</div>\
                              </div>';
                   });
@@ -748,105 +506,7 @@ $(document).ready(function() {
 
 
 
-    //DIPLAYED SERVER CONTENT
 
-
-
-        //Allow user to drag item into breadcrumb to move back a folder
-        $("#back").droppable({
-            over: function(event, ui) {
-                $(this).addClass("highlighter_focus_in");
-            },
-            out: function(event, ui) {
-                $(this).removeClass("highlighter_focus_in");
-            },
-            drop: function( event, ui ) {
-                var drag = $(ui.draggable).attr("id");
-                var dragType = $(ui.draggable).attr("row-type");
-                var drop = $('#previousBread').find('a').attr('id');
-                var body = {};
-                body.parent = drop;
-                body = JSON.stringify(body);
-                $(this).removeClass("highlighter_focus_in");
-                console.log(drop);
-                console.log(dragType);
-                $.ajax({
-                    url: urlStart + "/v1/"+dragType+"s/" + drag,
-                    method: "PUT",
-                    data: body,
-                    dataType: 'json',
-                    headers: { "Auth": token },
-                    contentType: "application/json",
-                     success: function(result,status,jqXHR ){
-                        console.log(result);
-                        getDocuments();
-                     },
-                     error(jqXHR, textStatus, errorThrown){
-                       console.log(errorThrown);
-                     }
-                });
-
-            }
-
-        });
-
-        //Navigate to new parent on row click
-
-        //View QR
-        $('body').on("click",'.downloadQR', function(){
-            revCode = $(this).attr('id');
-            $('#qrHeading').text('Rev Code: ' + revCode);
-            $('#qrcode').html('').qrcode(revCode);
-            $('#qrModal').modal();
-
-        //     console.log(revCode);
-        // $.post('functions/workspace/getQR.php', {revCode: revCode}, function (data) {
-        //     console.log(data)
-        //
-        // });
-
-        });
-
-    //QR Code
-
-
-
-        //Download QR Code Button
-
-        function downloadCanvas(link, canvasId, filename) {
-            link.href = document.getElementById(canvasId).toDataURL();
-            link.download = filename;
-
-        }
-
-        /**
-         * The event handler for the link's onclick event. We give THIS as a
-         * parameter (=the link element), ID of the canvas and a filename.
-         */
-        document.getElementById('qrButton').addEventListener('click', function() {
-            downloadCanvas(this, 'qrCanvas', revCode + '.png');
-        }, false);
-
-
-    (function($) {
-        var $window = $(window),
-            $html = $('#search-bar nav');
-
-        function resize() {
-            if ($window.width() > 787) {
-                $('#search-bar').show()
-            } else {
-                $('#search-bar').hide()
-
-            }
-        }
-
-        $window
-            .resize(resize)
-            .trigger('resize');
-    })(jQuery);
-
-    $('.active').addClass('blue')
 
 
 

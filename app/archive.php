@@ -7,9 +7,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Workspace - THW</title>
+    <title>Archives | Revision Check</title>
     <link rel="stylesheet" href="../assets/css/bootstrap/bootstrap.min.css">
-    <script type="text/javascript" src="../assets/js/url.js"></script> 
+    <script type="text/javascript" src="../assets/js/url.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="../assets/css/bootstrap/bootstrap.js"></script>
@@ -33,9 +33,17 @@
 <div id="right-bar" class="col-sm-9">
 
     <div id="content-bar" class="row">
+        <div class="modalLoading"></div>
+
         <div id="main-bar" class="col-md-10">
-
-
+            <div class="row" id="breadcrumbRow">
+                <div class="">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item previous-breadcrumb" id="previousBread"><a href="" class="sad" id="0"></a></li>
+                        <li class="breadcrumb-item active" id="currentBread">Archives</li>
+                    </ol>
+                </div>
+            </div>
             <div class="row" id="documentrow">
             </div>
         </div>
